@@ -1,0 +1,89 @@
+domain,registers_table,registers_field,source_code,source_dataset_id,source_field,mapping_type,join_key,notes
+entreprise,entreprises,siren,sirene_ul,5b7ffc618b4c4169d30727e0,siren,direct,siren,Cle unite legale
+entreprise,entreprises,diffusable,sirene_ul,5b7ffc618b4c4169d30727e0,statutDiffusionUniteLegale,direct,siren,Convertir statut en booleen/statut
+entreprise,entreprises,nom_entreprise,sirene_ul,5b7ffc618b4c4169d30727e0,denominationUniteLegale|nomUniteLegale|prenomUsuelUniteLegale,jointure,siren,Recomposer selon personne morale ou physique
+entreprise,entreprises,denomination,sirene_ul,5b7ffc618b4c4169d30727e0,denominationUniteLegale,direct,siren,
+entreprise,entreprises,nom,sirene_ul,5b7ffc618b4c4169d30727e0,nomUniteLegale,direct,siren,
+entreprise,entreprises,prenom,sirene_ul,5b7ffc618b4c4169d30727e0,prenomUsuelUniteLegale,direct,siren,
+entreprise,entreprises,sexe,sirene_ul,5b7ffc618b4c4169d30727e0,sexeUniteLegale,direct,siren,
+entreprise,entreprises,sigle,sirene_ul,5b7ffc618b4c4169d30727e0,sigleUniteLegale,direct,siren,
+entreprise,entreprises,code_naf,sirene_ul,5b7ffc618b4c4169d30727e0,activitePrincipaleUniteLegale,direct,siren,
+entreprise,entreprises,nomenclature_code_naf,sirene_ul,5b7ffc618b4c4169d30727e0,nomenclatureActivitePrincipaleUniteLegale,direct,siren,
+entreprise,entreprises,categorie_juridique,sirene_ul,5b7ffc618b4c4169d30727e0,categorieJuridiqueUniteLegale,direct,siren,
+entreprise,entreprises,date_creation,sirene_ul,5b7ffc618b4c4169d30727e0,dateCreationUniteLegale,direct,siren,
+entreprise,entreprises,entreprise_cessee,sirene_ul,5b7ffc618b4c4169d30727e0,etatAdministratifUniteLegale,direct,siren,A/C vers actif/cesse
+entreprise,entreprises,entreprise_employeuse,sirene_ul,5b7ffc618b4c4169d30727e0,caractereEmployeurUniteLegale,direct,siren,
+entreprise,entreprises,societe_a_mission,sirene_ul,5b7ffc618b4c4169d30727e0,societeMissionUniteLegale,direct,siren,
+entreprise,entreprises,economie_sociale_solidaire,sirene_ul,5b7ffc618b4c4169d30727e0,economieSocialeSolidaireUniteLegale,direct,siren,
+entreprise,entreprises,tranche_effectif,sirene_ul,5b7ffc618b4c4169d30727e0,trancheEffectifsUniteLegale,direct,siren,
+entreprise,entreprises,effectif_min,sirene_ul,5b7ffc618b4c4169d30727e0,trancheEffectifsUniteLegale,jointure,siren,Table locale de conversion tranches effectifs
+entreprise,entreprises,effectif_max,sirene_ul,5b7ffc618b4c4169d30727e0,trancheEffectifsUniteLegale,jointure,siren,Table locale de conversion tranches effectifs
+entreprise,entreprises,annee_effectif,sirene_ul,5b7ffc618b4c4169d30727e0,anneeEffectifsUniteLegale,direct,siren,
+entreprise,entreprises,capital,bodacc,559395f1c751df0f51a453b9,capital,partiel,siren,Disponible dans certaines annonces
+entreprise,entreprises,objet_social,,,"",non_couvert,siren,RNE/actes necessaires
+entreprise,entreprises,statut_rcs,bodacc,559395f1c751df0f51a453b9,rcs,partiel,siren,Annonce par annonce pas statut courant complet
+entreprise,etablissements,siret,sirene_etab,5b7ffc618b4c4169d30727e0,siret,direct,siret,
+entreprise,etablissements,siren,sirene_etab,5b7ffc618b4c4169d30727e0,siren,direct,siret,
+entreprise,etablissements,nic,sirene_etab,5b7ffc618b4c4169d30727e0,nic,direct,siret,
+entreprise,etablissements,siege,sirene_etab,5b7ffc618b4c4169d30727e0,etablissementSiege,direct,siret,
+entreprise,etablissements,numero_voie,sirene_etab,5b7ffc618b4c4169d30727e0,numeroVoieEtablissement,direct,siret,
+entreprise,etablissements,indice_repetition,sirene_etab,5b7ffc618b4c4169d30727e0,indiceRepetitionEtablissement,direct,siret,
+entreprise,etablissements,type_voie,sirene_etab,5b7ffc618b4c4169d30727e0,typeVoieEtablissement,direct,siret,
+entreprise,etablissements,libelle_voie,sirene_etab,5b7ffc618b4c4169d30727e0,libelleVoieEtablissement,direct,siret,
+entreprise,etablissements,code_postal,sirene_etab,5b7ffc618b4c4169d30727e0,codePostalEtablissement,direct,siret,
+entreprise,etablissements,code_commune,sirene_etab,5b7ffc618b4c4169d30727e0,codeCommuneEtablissement,direct,siret,
+entreprise,etablissements,ville,sirene_etab,5b7ffc618b4c4169d30727e0,libelleCommuneEtablissement,direct,siret,
+entreprise,etablissements,latitude,ban,5530fbacc751df5ff937dddb,lat,jointure,adresse,Geocodage BAN ou conversion Lambert Sirene
+entreprise,etablissements,longitude,ban,5530fbacc751df5ff937dddb,lon,jointure,adresse,Geocodage BAN ou conversion Lambert Sirene
+entreprise,etablissements,code_naf,sirene_etab,5b7ffc618b4c4169d30727e0,activitePrincipaleEtablissement,direct,siret,
+entreprise,etablissements,etablissement_cesse,sirene_etab,5b7ffc618b4c4169d30727e0,etatAdministratifEtablissement,direct,siret,
+entreprise,etablissements,enseigne,sirene_etab,5b7ffc618b4c4169d30727e0,enseigne1Etablissement|enseigne2Etablissement|enseigne3Etablissement,direct,siret,
+entreprise,representants,*,bodacc,559395f1c751df0f51a453b9,administration,partiel,siren,Texte annonce pas referentiel complet
+entreprise,beneficiaires_effectifs,*,,"","",non_couvert,siren,Acces habilite pas open data public
+entreprise,publications_bodacc,*,bodacc,559395f1c751df0f51a453b9,annonces-commerciales,direct,siren,Parser XML/export
+entreprise,procedures_collectives,*,bodacc,559395f1c751df0f51a453b9,annonces procedures,direct,siren,Parser types annonces
+immobilier,lieux_geocodes,label,ban,5530fbacc751df5ff937dddb,label,direct,adresse,API adresse ou CSV BAN
+immobilier,lieux_geocodes,code_postal,ban,5530fbacc751df5ff937dddb,postcode|code_postal,direct,adresse,
+immobilier,lieux_geocodes,code_commune,ban,5530fbacc751df5ff937dddb,citycode|code_insee,direct,adresse,
+immobilier,lieux_geocodes,latitude,ban,5530fbacc751df5ff937dddb,lat,direct,adresse,
+immobilier,lieux_geocodes,longitude,ban,5530fbacc751df5ff937dddb,lon,direct,adresse,
+immobilier,parcelles,numero,cadastre,,id,direct,parcelle,Source cadastre.data.gouv.fr a confirmer
+immobilier,parcelles,geometrie,cadastre,,geometry,direct,parcelle,GeoJSON parcelle
+immobilier,parcelles,prefixe,cadastre,,prefixe,direct,parcelle,
+immobilier,parcelles,section,cadastre,,section,direct,parcelle,
+immobilier,parcelles,numero_plan,cadastre,,numero,direct,parcelle,
+immobilier,parcelles,code_commune,cadastre,,commune,direct,parcelle,
+immobilier,parcelles,contenance,cadastre,,contenance,direct,parcelle,
+immobilier,parcelles,adresse,ban,5530fbacc751df5ff937dddb,label,jointure,parcelle centroid/adresse,Adresse par geocodage ou adresses cadastrales
+immobilier,parcelle_proprietaires,siren,,,"",a_confirmer,parcelle,Donnee proprietaire foncier sensible/source a identifier
+immobilier,parcelle_occupants,siren,sirene_etab,5b7ffc618b4c4169d30727e0,siren,jointure,geocoded_siret,Intersection etablissement geocode avec parcelle
+immobilier,ventes_immobilieres,date_vente,geo_dvf,5cc1b94a634f4165e96436c1,date_mutation,direct,parcelle,
+immobilier,ventes_immobilieres,nature,geo_dvf,5cc1b94a634f4165e96436c1,nature_mutation,direct,parcelle,
+immobilier,ventes_immobilieres,valeur_fonciere,geo_dvf,5cc1b94a634f4165e96436c1,valeur_fonciere,direct,parcelle,
+immobilier,ventes_immobilieres,type_local,geo_dvf,5cc1b94a634f4165e96436c1,type_local,direct,parcelle,
+immobilier,ventes_immobilieres,surface_reelle_bati,geo_dvf,5cc1b94a634f4165e96436c1,surface_reelle_bati,direct,parcelle,
+immobilier,ventes_immobilieres,surface_terrain,geo_dvf,5cc1b94a634f4165e96436c1,surface_terrain,direct,parcelle,
+immobilier,ventes_immobilieres,nombre_pieces,geo_dvf,5cc1b94a634f4165e96436c1,nombre_pieces_principales,direct,parcelle,
+immobilier,vente_lots,numero,geo_dvf,5cc1b94a634f4165e96436c1,lot*_numero,direct,mutation,Pivoter colonnes lots
+immobilier,vente_lots,surface_carrez,geo_dvf,5cc1b94a634f4165e96436c1,lot*_surface_carrez,direct,mutation,Pivoter colonnes lots
+immobilier,batiments,batiment_groupe_id,rnb,65a5568dfc88169d0a5416ca,id,direct,batiment,Nom exact export a confirmer
+immobilier,batiments,parcelle_numero,rnb,65a5568dfc88169d0a5416ca,parcelles|geometry,jointure,geometry,Jointure spatiale ou attribut
+immobilier,batiments,surface,rnb,65a5568dfc88169d0a5416ca,surface,partiel,batiment,Colonne exacte a confirmer
+immobilier,dpe,identifiant_dpe,dpe_logements,67f7e557cb268460ce66c8d4,identifiant_dpe,direct,dpe,Nom exact via API ADEME a confirmer
+immobilier,dpe,classe_bilan_dpe,dpe_logements,67f7e557cb268460ce66c8d4,classe_bilan_dpe,direct,dpe,
+immobilier,dpe,classe_emission_ges,dpe_logements,67f7e557cb268460ce66c8d4,classe_emission_ges,direct,dpe,
+immobilier,dpe,date_etablissement_dpe,dpe_logements,67f7e557cb268460ce66c8d4,date_etablissement_dpe,direct,dpe,
+immobilier,dpe,type_batiment_dpe,dpe_logements,67f7e557cb268460ce66c8d4,type_batiment_dpe,direct,dpe,
+immobilier,coproprietes,numero_immatriculation,rnic,62da71c068871f4c54258c7c,numero_d_immatriculation,direct,numero_immatriculation,
+immobilier,coproprietes,parcelle_numero,rnic,62da71c068871f4c54258c7c,reference_cadastrale_1|2|3,direct,numero_immatriculation,Pivoter references cadastrales
+immobilier,coproprietes,nom,rnic,62da71c068871f4c54258c7c,nom_d_usage_de_la_copropriete,direct,numero_immatriculation,
+immobilier,coproprietes,mandat_en_cours,rnic,62da71c068871f4c54258c7c,mandat_en_cours_dans_la_copropriete,direct,numero_immatriculation,
+immobilier,coproprietes,nombre_total_lots,rnic,62da71c068871f4c54258c7c,nombre_total_de_lots,direct,numero_immatriculation,
+immobilier,coproprietes,type_syndic,rnic,62da71c068871f4c54258c7c,type_de_syndic_benevole_professionnel_non_connu,direct,numero_immatriculation,
+immobilier,coproprietes,syndic_siret,rnic,62da71c068871f4c54258c7c,siret_du_representant_legal,direct,numero_immatriculation,
+immobilier,coproprietes,date_immatriculation,rnic,62da71c068871f4c54258c7c,date_d_immatriculation,direct,numero_immatriculation,
+immobilier,coproprietes,date_reglement_copropriete,rnic,62da71c068871f4c54258c7c,date_du_reglement_de_copropriete,direct,numero_immatriculation,
+immobilier,permis_urbanisme,*,sitadel,689c42fa521ccf80ce954f83,permis CSV Dido,a_confirmer,adresse,Colonnes exactes via dictionnaires XLS
+immobilier,fonds_de_commerce,*,bodacc,559395f1c751df0f51a453b9,annonces ventes fonds,partiel,adresse,Parser annonces puis geocoder
+immobilier,documents_urbanisme,*,gpu,,documents urbanisme,a_confirmer,parcelle,Source GPU/services a cadrer
+immobilier,zones_urbanisme,*,gpu,,zonages,a_confirmer,geometry,Jointure spatiale parcelle
