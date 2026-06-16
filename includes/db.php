@@ -1,6 +1,38 @@
 <?php
 declare(strict_types=1);
 
+function registers_load_env(): void
+{
+    static $loaded = false;
+
+    if ($loaded) {
+        return;
+    }
+    $loaded = true;
+
+    $envFile = dirname(__DIR__) . '/.env';
+    if (!is_readable($envFile)) {
+        return;
+    }
+
+    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+            continue;
+        }
+
+        [$key, $value] = array_map('trim', explode('=', $line, 2));
+        if ($key === '' || getenv($key) !== false) {
+            continue;
+        }
+
+        $value = trim($value, "\"'");
+        putenv($key . '=' . $value);
+        $_ENV[$key] = $value;
+        $_SERVER[$key] = $value;
+    }
+}
+
 function registers_db(): PDO
 {
     static $pdo = null;
@@ -8,6 +40,8 @@ function registers_db(): PDO
     if ($pdo instanceof PDO) {
         return $pdo;
     }
+
+    registers_load_env();
 
     $host = getenv('REGISTERS_DB_HOST') ?: 'localhost';
     $db = getenv('REGISTERS_DB_NAME') ?: 'Registers';
@@ -28,4 +62,3 @@ function registers_db(): PDO
 
     return $pdo;
 }
-
