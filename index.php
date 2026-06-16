@@ -23,7 +23,7 @@ try {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registers</title>
-    <link rel="stylesheet" href="assets/css/app.css?v=20260615-4">
+    <link rel="stylesheet" href="assets/css/app.css?v=20260616-1">
 </head>
 <body>
 
@@ -70,76 +70,83 @@ try {
 <!-- ===== LANDING ===== -->
 <section class="landing" id="landing">
     <div class="landing-inner">
-        <h1 class="landing-title">Registers</h1>
-        <p class="landing-sub">Sociétés, dirigeants, immobilier, parcelles —<br>toutes vos données croisées à la demande.</p>
-
-        <!-- Barre de recherche principale -->
-        <form class="hero-search" id="hero-form" role="search">
-            <div class="hero-wrap">
-                <svg class="hero-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <circle cx="8.5" cy="8.5" r="5.75" stroke="currentColor" stroke-width="1.8"/>
-                    <path d="M13 13 17.5 17.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                </svg>
-                <input id="hero-query" type="search"
-                       placeholder="Société, SIREN, dirigeant, adresse, parcelle…"
-                       autocomplete="off" spellcheck="false" aria-label="Recherche">
-                <select id="hero-type" aria-label="Type de recherche">
-                    <option value="all">Tout</option>
-                    <option value="company">Entreprise</option>
-                    <option value="person">Personne</option>
-                    <option value="address">Adresse</option>
-                    <option value="parcel">Parcelle</option>
-                </select>
+        <div class="launch-panel">
+            <div class="launch-copy">
+                <span class="launch-kicker">Recherche publique connectée</span>
+                <h1 class="landing-title">Registers</h1>
+                <p class="landing-sub">Sociétés, dirigeants, adresses, parcelles et signaux immobiliers dans une même fiche exploitable.</p>
             </div>
-            <button type="submit" class="hero-btn">Rechercher</button>
-        </form>
 
-        <!-- Domaines -->
-        <div class="domain-cards">
-            <button type="button" class="domain-card co" data-domain="company">
-                <span class="domain-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="7" width="20" height="15" rx="1.5"/>
-                        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                        <line x1="12" y1="12" x2="12" y2="17"/>
-                        <line x1="9" y1="14.5" x2="15" y2="14.5"/>
+            <form class="hero-search" id="hero-form" role="search">
+                <div class="hero-wrap">
+                    <svg class="hero-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <circle cx="8.5" cy="8.5" r="5.75" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M13 13 17.5 17.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                     </svg>
-                </span>
-                <strong>Entreprises</strong>
-                <small>Sociétés · SIREN · Dirigeants · BODACC · Finances</small>
-            </button>
+                    <input id="hero-query" type="search"
+                           placeholder="10 rue Ordener Paris, Peugeot SA, SIREN, parcelle…"
+                           autocomplete="off" spellcheck="false" aria-label="Recherche">
+                    <select id="hero-type" aria-label="Type de recherche">
+                        <option value="all">Tout</option>
+                        <option value="company">Entreprise</option>
+                        <option value="person">Personne</option>
+                        <option value="address">Adresse</option>
+                        <option value="parcel">Parcelle</option>
+                    </select>
+                    <button type="submit" class="hero-btn">Analyser</button>
+                </div>
+            </form>
 
-            <button type="button" class="domain-card re" data-domain="address">
-                <span class="domain-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.5Z"/>
-                        <path d="M9 21V12h6v9"/>
-                    </svg>
-                </span>
-                <strong>Immobilier</strong>
-                <small>Adresses · Parcelles · DVF · DPE · Copropriétés</small>
-            </button>
-
-            <a class="domain-card est" href="/estimatiz/">
-                <span class="domain-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2 2 7l10 5 10-5-10-5Z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
-                    </svg>
-                </span>
-                <strong>Estimatiz</strong>
-                <small>Estimation · Prix au m² · Ventes DVF</small>
-            </a>
+            <div class="quick-searches" aria-label="Exemples de recherche">
+                <button type="button" data-query="10 rue Ordener Paris" data-type="all">10 rue Ordener Paris</button>
+                <button type="button" data-query="Peugeot SA" data-type="company">Peugeot SA</button>
+                <button type="button" data-query="75018" data-type="address">Adresse 75018</button>
+            </div>
         </div>
 
-        <div class="landing-sources">
-            <span class="src-chip">API Entreprises</span>
-            <span class="src-chip">Géoplateforme</span>
-            <span class="src-chip">DVF</span>
-            <span class="src-chip">RNIC</span>
-            <span class="src-chip">ADEME DPE</span>
-            <span class="src-chip">BODACC</span>
+        <div class="landing-preview" aria-hidden="true">
+            <div class="preview-results">
+                <div class="preview-caption">Résultats</div>
+                <div class="preview-row active">
+                    <span class="badge type-address">Adresse</span>
+                    <strong>10 rue Ordener, Paris</strong>
+                    <small>Géoplateforme · score 0,94</small>
+                </div>
+                <div class="preview-row">
+                    <span class="badge type-parcel">Parcelle</span>
+                    <strong>75118…</strong>
+                    <small>Cadastre · parcelles proches</small>
+                </div>
+                <div class="preview-row">
+                    <span class="badge type-company">Entreprise</span>
+                    <strong>Sociétés à l’adresse</strong>
+                    <small>API Recherche d’Entreprises</small>
+                </div>
+            </div>
+            <div class="preview-detail">
+                <div class="preview-head">
+                    <span class="badge type-address">Adresse normalisée</span>
+                    <span class="source-dot">data.gouv.fr</span>
+                </div>
+                <h2>10 rue Ordener, 75018 Paris</h2>
+                <div class="preview-grid">
+                    <div><span>Parcelles proches</span><strong>4</strong></div>
+                    <div><span>DPE</span><strong>C</strong></div>
+                    <div><span>DVF 2024</span><strong>12 ventes</strong></div>
+                    <div><span>Sources</span><strong>7</strong></div>
+                </div>
+                <div class="preview-map">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="landing-sources">
+                <span class="src-chip">API Entreprises</span>
+                <span class="src-chip">Géoplateforme</span>
+                <span class="src-chip">DVF</span>
+                <span class="src-chip">RNIC</span>
+                <span class="src-chip">ADEME DPE</span>
+                <span class="src-chip">BODACC</span>
+            </div>
         </div>
     </div>
 </section>
@@ -166,6 +173,33 @@ try {
             <p>Sélectionne un résultat pour afficher la fiche.</p>
         </div>
     </main>
+
+    <aside class="context-panel" id="context-panel">
+        <div class="context-block">
+            <div class="context-title">Carte & parcelles</div>
+            <div class="mini-map">
+                <span class="parcel-shape shape-a"></span>
+                <span class="parcel-shape shape-b"></span>
+                <span class="parcel-shape shape-c"></span>
+            </div>
+        </div>
+        <div class="context-block">
+            <div class="context-title">Graphe lié</div>
+            <div class="entity-graph">
+                <span class="node main">Registre</span>
+                <span class="node">Entreprise</span>
+                <span class="node">Adresse</span>
+                <span class="node">Parcelle</span>
+            </div>
+        </div>
+        <div class="context-block">
+            <div class="context-title">Exports</div>
+            <div class="context-actions">
+                <button type="button" class="btn-sm primary" id="context-json" disabled>JSON</button>
+                <button type="button" class="btn-sm" disabled>CSV</button>
+            </div>
+        </div>
+    </aside>
 </div>
 
 <!-- ===== OVERLAY : Sources ===== -->
@@ -263,6 +297,6 @@ try {
     </div>
 </div>
 
-<script src="assets/js/app.js?v=20260615-4"></script>
+<script src="assets/js/app.js?v=20260616-1"></script>
 </body>
 </html>

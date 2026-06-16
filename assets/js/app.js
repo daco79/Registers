@@ -250,12 +250,24 @@ function showLanding() {
     qs('#landing').classList.remove('hidden');
     qs('#workspace').classList.add('hidden');
     qs('#search-form').classList.add('hidden');
+    resetContextPanel();
 }
 
 function showWorkspace() {
     qs('#landing').classList.add('hidden');
     qs('#workspace').classList.remove('hidden');
     qs('#search-form').classList.remove('hidden');
+}
+
+function sourceLabel(source) {
+    const labels = {
+        api_recherche_entreprises: 'API Entreprises',
+        geoplateforme_geocodage: 'Géoplateforme',
+        geoplateforme_parcel: 'Cadastre',
+        data_gouv: 'data.gouv.fr',
+        local_db: 'Base locale',
+    };
+    return labels[source] || source || 'Source publique';
 }
 
 function openOverlay(id) {
@@ -314,11 +326,19 @@ function renderResults(items) {
     container.innerHTML = visible.map(item => {
         const color = TYPE_COLOR[item.type] || '#334155';
         const idx   = items.indexOf(item);
+        const source = sourceLabel(item.source);
         return `
             <button class="result-card" type="button" data-index="${idx}">
-                <span class="rc-type" style="color:${color}">${esc(TYPE_LABEL[item.type] || item.type)}</span>
+                <span class="rc-topline">
+                    <span class="rc-type" style="color:${color}">${esc(TYPE_LABEL[item.type] || item.type)}</span>
+                    <span class="rc-source">${esc(source)}</span>
+                </span>
                 <span class="rc-name">${esc(item.title || item.id)}</span>
                 <span class="rc-sub">${esc(item.subtitle || item.id)}</span>
+                <span class="rc-foot">
+                    <span>${esc(item.match || 'correspondance')}</span>
+                    <span>confiance élevée</span>
+                </span>
             </button>
         `;
     }).join('');
@@ -382,6 +402,112 @@ function dpeBadge(cls) {
     if (!cls) return '';
     const letter = String(cls).trim().charAt(0).toUpperCase();
     return `<span class="dpe-badge dpe-${letter}" title="Classe DPE ${letter}">${letter}</span>`;
+}
+
+function sectionCount(payload, keys) {
+    return keys.reduce((sum, key) => sum + (Array.isArray(payload[key]) ? payload[key].length : 0), 0);
+}
+
+function contextMetric(label, value) {
+    return `<div class="context-metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`;
+}
+
+function resetContextPanel() {
+    const panel = qs('#context-panel');
+    if (!panel) return;
+    panel.innerHTML = `
+        <div class="context-block">
+            <div class="context-title">Carte & parcelles</div>
+            <div class="mini-map">
+                <span class="parcel-shape shape-a"></span>
+                <span class="parcel-shape shape-b"></span>
+                <span class="parcel-shape shape-c"></span>
+            </div>
+        </div>
+        <div class="context-block">
+            <div class="context-title">Graphe lié</div>
+            <div class="entity-graph">
+                <span class="node main">Registre</span>
+                <span class="node">Entreprise</span>
+                <span class="node">Adresse</span>
+                <span class="node">Parcelle</span>
+            </div>
+        </div>
+        <div class="context-block">
+            <div class="context-title">Exports</div>
+            <div class="context-actions">
+                <button type="button" class="btn-sm primary" id="context-json" disabled>JSON</button>
+                <button type="button" class="btn-sm" disabled>CSV</button>
+            </div>
+        </div>
+    `;
+}
+
+function renderContextPanel(payload) {
+    const panel = qs('#context-panel');
+    if (!panel) return;
+
+    const type = payload.type;
+    const obj = firstObject(payload);
+    const title = entityName(type, obj);
+    const parcels = sectionCount(payload, ['nearby_parcels', 'parcelles', 'owned_parcels', 'occupied_parcels']);
+    const companies = sectionCount(payload, ['establishments', 'representatives', 'companies']);
+    const dpe = sectionCount(payload, ['dpe']);
+    const sales = sectionCount(payload, ['sales', 'ventes', 'mutations']);
+    const sources = ['type', 'source', 'raw'].reduce((sum, key) => sum - (key in payload ? 1 : 0), Object.keys(payload).length);
+    const badgeClass = TYPE_CSS[type] || '';
+
+    panel.innerHTML = `
+        <div class="context-block context-identity">
+            <div class="context-title">Entité sélectionnée</div>
+            <span class="badge ${badgeClass}">${esc(TYPE_LABEL[type] || type)}</span>
+            <h3>${esc(title)}</h3>
+            <p>${esc(entityId(type, obj) || sourceLabel(payload.source))}</p>
+        </div>
+        <div class="context-block">
+            <div class="context-title">Carte & parcelles</div>
+            <div class="mini-map">
+                <span class="parcel-shape shape-a"></span>
+                <span class="parcel-shape shape-b"></span>
+                <span class="parcel-shape shape-c"></span>
+                <span class="map-pin"></span>
+            </div>
+            <div class="context-grid">
+                ${contextMetric('Parcelles', parcels || '—')}
+                ${contextMetric('DVF', sales || '—')}
+                ${contextMetric('DPE', dpe || '—')}
+                ${contextMetric('Sources', Math.max(1, sources))}
+            </div>
+        </div>
+        <div class="context-block">
+            <div class="context-title">Graphe lié</div>
+            <div class="entity-graph">
+                <span class="node main">${esc(TYPE_LABEL[type] || 'Entité')}</span>
+                <span class="node">Adresse</span>
+                <span class="node">Parcelle</span>
+                <span class="node">SIREN</span>
+                ${companies ? '<span class="node">Dirigeants</span>' : ''}
+            </div>
+        </div>
+        <div class="context-block">
+            <div class="context-title">Exports</div>
+            <div class="context-actions">
+                <button type="button" class="btn-sm primary" id="context-json">JSON</button>
+                <button type="button" class="btn-sm" id="context-csv">CSV</button>
+            </div>
+        </div>
+    `;
+
+    qs('#context-json').addEventListener('click', () => qs('#btn-show-json')?.click());
+    qs('#context-csv').addEventListener('click', () => {
+        const rows = Object.entries(obj).filter(([k, v]) => !HIDDEN_FIELDS.has(k) && fmt(v) !== null);
+        const csv = 'champ,valeur\n' + rows.map(([k, v]) => `"${fmtKey(k).replace(/"/g, '""')}","${String(fmt(v)).replace(/"/g, '""')}"`).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `registers_${type}_${Date.now()}.csv`;
+        a.click();
+    });
 }
 
 function renderKV(type, obj) {
@@ -473,6 +599,7 @@ function renderDetail(payload) {
                 ${id ? `<div class="entity-id">${esc(id)}</div>` : ''}
             </div>
             <div class="entity-actions">
+                <button type="button" class="btn-sm" id="btn-export-csv">CSV</button>
                 <button type="button" class="btn-sm primary" id="btn-show-json">JSON</button>
             </div>
         </div>
@@ -480,6 +607,7 @@ function renderDetail(payload) {
         ${renderKV(type, obj)}
         ${sections}
     `;
+    renderContextPanel(payload);
 
     qs('#btn-show-json').addEventListener('click', () => {
         const json = JSON.stringify(payload, null, 2);
@@ -491,6 +619,7 @@ function renderDetail(payload) {
         dl.download = `registers_${type}_${Date.now()}.json`;
         openOverlay('#overlay-json');
     });
+    qs('#btn-export-csv').addEventListener('click', () => qs('#context-csv')?.click());
 }
 
 /* ================================================
@@ -504,6 +633,7 @@ async function loadEntity(item) {
             <p>Chargement…</p>
         </div>
     `;
+    resetContextPanel();
     try {
         const res = await getJson('api/live_detail.php', { type: item.type, id: item.detail_id || item.id });
         state.currentPayload = res.data;
@@ -514,6 +644,7 @@ async function loadEntity(item) {
                 <p style="color:var(--s-ferme)">${esc(err.message)}</p>
             </div>
         `;
+        resetContextPanel();
     }
 }
 
@@ -548,6 +679,7 @@ async function runSearch(event) {
             <p>Sélectionne un résultat.</p>
         </div>
     `;
+    resetContextPanel();
     qs('#result-meta').textContent = '';
     qs('#type-filters').innerHTML = '';
 
@@ -610,6 +742,14 @@ qsa('.domain-card').forEach(card => {
         qs('#hero-type').value = type;
         qs('#search-type').value = type;
         qs('#hero-query').focus();
+    });
+});
+
+qsa('.quick-searches button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        qs('#hero-query').value = btn.dataset.query || '';
+        qs('#hero-type').value = btn.dataset.type || 'all';
+        runSearch();
     });
 });
 
