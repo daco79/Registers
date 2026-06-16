@@ -11,7 +11,7 @@ set -euo pipefail
 SSH_USER="${SSH_USER:-zece2169}"
 SSH_HOST="${SSH_HOST:-dark.o2switch.net}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/mailvio_deploy}"
-REMOTE_DIR="${REMOTE_DIR:-registers}"
+REMOTE_DIR="${REMOTE_DIR:-registers.fr}"
 ZIP_NAME="${ZIP_NAME:-registers_deploy.zip}"
 LOCAL_DIR="$(cd "$(dirname "$0")" && pwd)"
 

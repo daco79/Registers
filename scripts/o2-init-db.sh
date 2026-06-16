@@ -8,7 +8,7 @@ set -euo pipefail
 #   SSH_USER=zece2169
 #   SSH_HOST=dark.o2switch.net
 #   SSH_KEY=$HOME/.ssh/mailvio_deploy
-#   REMOTE_DIR=registers
+#   REMOTE_DIR=registers.fr
 #   CPANEL_DB_SHORT=registers
 #   CPANEL_DB_USER_SHORT=registers
 #   REGISTERS_DB_PASS=...  # requis pour importer avec l'utilisateur existant
@@ -17,7 +17,7 @@ set -euo pipefail
 SSH_USER="${SSH_USER:-zece2169}"
 SSH_HOST="${SSH_HOST:-dark.o2switch.net}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/mailvio_deploy}"
-REMOTE_DIR="${REMOTE_DIR:-registers}"
+REMOTE_DIR="${REMOTE_DIR:-registers.fr}"
 CPANEL_DB_SHORT="${CPANEL_DB_SHORT:-registers}"
 CPANEL_DB_USER_SHORT="${CPANEL_DB_USER_SHORT:-registers}"
 LOCAL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
