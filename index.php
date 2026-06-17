@@ -124,7 +124,7 @@ try {
                 </span>
             </a>
 
-            <a class="domain-card est" href="/estimatiz/">
+            <a class="domain-card est" href="https://www.estimatiz.fr/">
                 <div class="domain-card-text">
                     <strong>Estimatiz</strong>
                     <small>Estimation · Prix au m² · Ventes DVF</small>

@@ -121,7 +121,7 @@ try {
                 <small>Adresses · Parcelles · DVF · DPE · Copropriétés</small>
             </button>
 
-            <a class="domain-card est" href="/estimatiz/">
+            <a class="domain-card est" href="https://www.estimatiz.fr/">
                 <span class="domain-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2 2 7l10 5 10-5-10-5Z"/>
