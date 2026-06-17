@@ -31,12 +31,12 @@ const TYPE_CSS = {
 };
 
 const TYPE_COLOR = {
-    company:       '#1d53d0',
-    establishment: '#1d53d0',
+    company:       '#1e4d3a',
+    establishment: '#1e4d3a',
     person:        '#6d28d9',
-    address:       '#b45309',
-    parcel:        '#0e7a52',
-    copro:         '#0369a1',
+    address:       '#9a7120',
+    parcel:        '#2d6a4f',
+    copro:         '#3a5a4a',
     dpe:           '#c2410c',
 };
 
@@ -602,16 +602,7 @@ async function loadSchema() {
 qs('#hero-form').addEventListener('submit', runSearch);
 qs('#search-form').addEventListener('submit', runSearch);
 
-/* Domain cards → préfiltrer le type et mettre le focus sur le hero */
-qsa('.domain-card').forEach(card => {
-    card.addEventListener('click', () => {
-        const domain = card.dataset.domain;
-        const type = (domain === 'address') ? 'address' : 'company';
-        qs('#hero-type').value = type;
-        qs('#search-type').value = type;
-        qs('#hero-query').focus();
-    });
-});
+/* Domain cards sont maintenant des <a> — pas de handler JS nécessaire */
 
 /* Brand → back to landing */
 qs('#brand-link').addEventListener('click', e => {

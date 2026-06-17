@@ -1,0 +1,73 @@
+/* ================================================
+   PALETTE 2 — Parchemin & Espresso
+   Override de app.css — charger après app.css
+   ================================================ */
+
+:root {
+    --bg:        #f7f5f0;
+    --surface:   #ffffff;
+    --surface-2: #f3f0eb;
+    --ink:       #1c1917;
+    --ink-2:     #44403c;
+    --muted:     #78716c;
+    --border:    #e8e3dc;
+    --border-2:  #d6cfc6;
+
+    --brand:     #2d2416;
+
+    /* Domain — Entreprises (espresso) */
+    --co:        #3b2d1e;
+    --co-lt:     #f3ede4;
+    --co-bd:     #c8b89a;
+    --co-dk:     #1e170e;
+
+    /* Domain — Immobilier (vert forêt) */
+    --re:        #2e6b3e;
+    --re-lt:     #eaf3ec;
+    --re-bd:     #9dc9a9;
+
+    /* Domain — Estimatiz (terracotta) */
+    --est:       #8b5e3c;
+    --est-lt:    #f5ede5;
+    --est-bd:    #d4a882;
+
+    /* Type accent colors */
+    --t-company:       #3b2d1e;
+    --t-establishment: #3b2d1e;
+    --t-person:        #6d28d9;
+    --t-address:       #8b5e3c;
+    --t-parcel:        #2e6b3e;
+    --t-copro:         #3b2d1e;
+    --t-dpe:           #c2410c;
+
+    --s-actif:   #15803d;
+    --s-ferme:   #b91c1c;
+}
+
+/* Focus ring — remplace le bleu hardcodé */
+.hero-wrap:focus-within {
+    border-color: var(--co);
+    box-shadow: 0 0 0 4px rgba(59, 45, 30, .13), 0 2px 12px rgba(0,0,0,.10);
+}
+#search-query:focus { border-color: var(--co); }
+#search-type:focus  { border-color: var(--co); }
+
+/* Spinner */
+.spinner { border-top-color: var(--co); }
+
+/* Btn primary */
+.btn-sm.primary { border-color: var(--co); background: var(--co); }
+.btn-sm.primary:hover { background: var(--co-dk); border-color: var(--co-dk); }
+
+/* Type badges — hardcodés dans app.css */
+.type-company       { background: #f3ede4; color: #3b2d1e; }
+.type-establishment { background: #f3ede4; color: #3b2d1e; }
+.type-copro         { background: #f3ede4; color: #3b2d1e; }
+
+/* Domain icon backgrounds */
+.domain-card.co  .domain-icon { background: rgba(59, 45, 30, .10); }
+.domain-card.re  .domain-icon { background: rgba(46, 107, 62, .12); }
+.domain-card.est .domain-icon { background: rgba(139, 94, 60, .12); }
+
+/* JSON pre */
+.json-pre { color: #2d1e0f; background: #faf8f5; }

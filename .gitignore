@@ -8,7 +8,13 @@ __pycache__/
 *.zip
 
 .claude/
+.vscode/
 Commande.rtf
+
+Base/
+Export/
+data/raw/
+nanobanana-output/
 
 EXCEL_parcelles_entreprise_final.xlsx
 PARCELLESDERETOUR.json

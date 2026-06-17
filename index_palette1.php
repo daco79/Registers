@@ -22,8 +22,9 @@ try {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registers</title>
-    <link rel="stylesheet" href="assets/css/app.css?v=20260616-1">
+    <title>Registers — Palette 1 : Vert & Or</title>
+    <link rel="stylesheet" href="assets/css/app.css?v=20260615-4">
+    <link rel="stylesheet" href="assets/css/palette1.css">
 </head>
 <body>
 
@@ -96,11 +97,7 @@ try {
 
         <!-- Domaines -->
         <div class="domain-cards">
-            <a class="domain-card co" href="entreprises.php">
-                <div class="domain-card-text">
-                    <strong>Entreprises</strong>
-                    <small>Sociétés · SIREN · Dirigeants · BODACC · Finances</small>
-                </div>
+            <button type="button" class="domain-card co" data-domain="company">
                 <span class="domain-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="7" width="20" height="15" rx="1.5"/>
@@ -109,26 +106,22 @@ try {
                         <line x1="9" y1="14.5" x2="15" y2="14.5"/>
                     </svg>
                 </span>
-            </a>
+                <strong>Entreprises</strong>
+                <small>Sociétés · SIREN · Dirigeants · BODACC · Finances</small>
+            </button>
 
-            <a class="domain-card re" href="immobilier.php">
-                <div class="domain-card-text">
-                    <strong>Immobilier</strong>
-                    <small>Adresses · Parcelles · DVF · DPE · Copropriétés</small>
-                </div>
+            <button type="button" class="domain-card re" data-domain="address">
                 <span class="domain-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.5Z"/>
                         <path d="M9 21V12h6v9"/>
                     </svg>
                 </span>
-            </a>
+                <strong>Immobilier</strong>
+                <small>Adresses · Parcelles · DVF · DPE · Copropriétés</small>
+            </button>
 
             <a class="domain-card est" href="/estimatiz/">
-                <div class="domain-card-text">
-                    <strong>Estimatiz</strong>
-                    <small>Estimation · Prix au m² · Ventes DVF</small>
-                </div>
                 <span class="domain-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2 2 7l10 5 10-5-10-5Z"/>
@@ -136,6 +129,8 @@ try {
                         <path d="M2 12l10 5 10-5"/>
                     </svg>
                 </span>
+                <strong>Estimatiz</strong>
+                <small>Estimation · Prix au m² · Ventes DVF</small>
             </a>
         </div>
 
@@ -269,6 +264,6 @@ try {
     </div>
 </div>
 
-<script src="assets/js/app.js?v=20260616-1"></script>
+<script src="assets/js/app.js?v=20260615-4"></script>
 </body>
 </html>

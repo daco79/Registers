@@ -27,7 +27,7 @@ rm -f "$ZIP_NAME"
 
 echo -e "${BLUE}[1/4] Creation du zip...${NC}"
 zip -q -r "$ZIP_NAME" \
-  index.php \
+  index.php entreprises.php immobilier.php \
   api/ \
   assets/ \
   includes/ \

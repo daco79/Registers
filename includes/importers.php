@@ -32,6 +32,15 @@ function http_json(string $url): array
     return $decoded;
 }
 
+function http_json_safe(string $url): ?array
+{
+    try {
+        return http_json($url);
+    } catch (Throwable) {
+        return null;
+    }
+}
+
 function iso_date(mixed $value): ?string
 {
     if (!is_string($value) || trim($value) === '') {
@@ -408,4 +417,181 @@ function import_geocode_from_ban(PDO $pdo, string $query): array
         'longitude' => $coords[0] ?? null,
         'source' => $url,
     ];
+}
+
+// ── Pappers Immobilier ────────────────────────────────────────────────────────
+
+function http_json_bearer(string $url, string $token): array
+{
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER  => true,
+        CURLOPT_TIMEOUT         => 30,
+        CURLOPT_CONNECTTIMEOUT  => 8,
+        CURLOPT_FOLLOWLOCATION  => true,
+        CURLOPT_HTTPHEADER      => [
+            'Accept: application/json',
+            'Authorization: Bearer ' . $token,
+        ],
+        CURLOPT_USERAGENT       => 'Registers-local/0.1',
+    ]);
+
+    $body   = curl_exec($ch);
+    $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error  = curl_error($ch);
+    curl_close($ch);
+
+    if ($body === false || $status >= 400) {
+        throw new RuntimeException($error ?: "HTTP {$status} — {$url}");
+    }
+
+    $decoded = json_decode($body, true);
+    if (!is_array($decoded)) {
+        throw new RuntimeException('Reponse JSON invalide.');
+    }
+
+    return $decoded;
+}
+
+function upsert_parcelle(PDO $pdo, array $p): string
+{
+    $numero = (string) ($p['numero'] ?? '');
+    if ($numero === '') {
+        throw new InvalidArgumentException('Parcelle sans numero.');
+    }
+
+    $adresse = is_array($p['adresse'] ?? null)
+        ? json_value($p['adresse'])
+        : ($p['adresse'] ?? null);
+
+    $proprietaires = $p['proprietaires'] ?? [];
+    $nbIdentifies  = count(array_filter($proprietaires, fn ($pr) => !empty($pr['siren'])));
+    $profilProp    = match (true) {
+        !isset($p['proprietaires'])          => null,
+        $nbIdentifies === 0 && empty(array_filter($proprietaires, fn ($pr) => !empty($pr))) => 'particulier',
+        $nbIdentifies === 0                  => 'particulier',
+        $nbIdentifies === 1                  => 'societe',
+        default                              => 'indivision',
+    };
+
+    upsert_row($pdo, 'parcelles', [
+        'numero'              => $numero,
+        'parcelle_cadastrale' => $p['parcelle_cadastrale'] ?? null,
+        'geometrie'           => json_value($p['geometrie'] ?? null),
+        'prefixe'             => $p['prefixe'] ?? null,
+        'section'             => $p['section'] ?? null,
+        'numero_plan'         => $p['numero_plan'] ?? null,
+        'adresse'             => $adresse,
+        'code_commune'        => $p['code_commune'] ?? null,
+        'commune'             => $p['commune'] ?? null,
+        'code_departement'    => $p['code_departement'] ?? null,
+        'departement'         => $p['departement'] ?? null,
+        'code_region'         => $p['code_region'] ?? null,
+        'region'              => $p['region'] ?? null,
+        'codes_postaux'       => json_value($p['codes_postaux'] ?? null),
+        'contenance'          => decimal_value($p['contenance'] ?? null),
+        'arpente'             => bool_value($p['arpente'] ?? null),
+        'bounding_box'        => json_value($p['bounding_box'] ?? null),
+        'surface_batie'                => decimal_value($p['surface_batie'] ?? null),
+        'surface_disponible'           => decimal_value($p['surface_disponible'] ?? null),
+        'nb_proprietaires_identifies'  => isset($p['proprietaires']) ? $nbIdentifies : null,
+        'profil_proprietaire'          => $profilProp,
+        'statistiques'                 => json_value($p['statistiques'] ?? null),
+        'raw_json'                     => json_value($p),
+    ], [
+        'parcelle_cadastrale', 'geometrie', 'prefixe', 'section', 'numero_plan', 'adresse',
+        'code_commune', 'commune', 'code_departement', 'departement',
+        'code_region', 'region', 'codes_postaux', 'contenance', 'arpente',
+        'bounding_box', 'surface_batie', 'surface_disponible',
+        'nb_proprietaires_identifies', 'profil_proprietaire', 'statistiques', 'raw_json',
+    ]);
+
+    return $numero;
+}
+
+function upsert_parcelle_proprietaire(PDO $pdo, string $parcelle_numero, array $prop): int
+{
+    $siren = (isset($prop['siren']) && $prop['siren'] !== '') ? (string) $prop['siren'] : null;
+
+    if ($siren !== null) {
+        $chk = $pdo->prepare('SELECT id FROM parcelle_proprietaires WHERE parcelle_numero = ? AND siren = ? LIMIT 1');
+        $chk->execute([$parcelle_numero, $siren]);
+    } else {
+        $nom = $prop['nom_entreprise'] ?? $prop['denomination'] ?? null;
+        $chk = $pdo->prepare('SELECT id FROM parcelle_proprietaires WHERE parcelle_numero = ? AND nom_entreprise = ? AND siren IS NULL LIMIT 1');
+        $chk->execute([$parcelle_numero, $nom]);
+    }
+
+    $existing = $chk->fetchColumn();
+
+    $row = [
+        'parcelle_numero'                 => $parcelle_numero,
+        'siren'                           => $siren,
+        'nom_entreprise'                  => $prop['nom_entreprise'] ?? null,
+        'denomination'                    => $prop['denomination'] ?? null,
+        'personne_physique'               => bool_value(empty($siren) || !empty($prop['personnes_physiques'])),
+        'date_creation'                   => iso_date($prop['date_creation'] ?? null),
+        'tranche_effectifs'               => $prop['tranche_effectifs'] ?? null,
+        'annee_effectifs'                 => isset($prop['annee_effectifs']) ? (int) $prop['annee_effectifs'] : null,
+        'categorie_juridique'             => $prop['categorie_juridique'] ?? null,
+        'activite_principale'             => $prop['activite_principale'] ?? null,
+        'employeur'                       => bool_value($prop['employeur'] ?? null),
+        'cessation_activite'              => bool_value($prop['cessation_activite'] ?? null),
+        'monoproprietaire'                => bool_value($prop['monoproprietaire'] ?? null),
+        'proprietaire_occupant'           => bool_value($prop['proprietaire_occupant'] ?? null),
+        'lmnp'                            => bool_value($prop['lmnp'] ?? null),
+        'siege'                           => json_value($prop['siege'] ?? null),
+        'personnes_physiques'             => json_value($prop['personnes_physiques'] ?? null),
+        'representants_personnes_morales' => json_value($prop['representants_personnes_morales'] ?? null),
+        'emails'                          => json_value($prop['emails'] ?? null),
+        'telephones'                      => json_value($prop['telephones'] ?? null),
+        'sites_internet'                  => json_value($prop['sites_internet'] ?? null),
+        'lien_linkedin'                   => $prop['lien_linkedin'] ?? null,
+        'raw_json'                        => json_value($prop),
+    ];
+
+    $updateCols = array_keys(array_diff_key($row, ['parcelle_numero' => 1]));
+
+    if ($existing !== false) {
+        $sets = implode(', ', array_map(fn ($c) => "`{$c}` = :{$c}", $updateCols));
+        $stmt = $pdo->prepare("UPDATE parcelle_proprietaires SET {$sets}, updated_at = CURRENT_TIMESTAMP WHERE id = :__id");
+        $stmt->execute(array_merge($row, ['__id' => $existing]));
+        return (int) $existing;
+    }
+
+    $cols = implode(', ', array_map(fn ($c) => "`{$c}`", array_keys($row)));
+    $phs  = implode(', ', array_map(fn ($c) => ":{$c}", array_keys($row)));
+    $pdo->prepare("INSERT INTO parcelle_proprietaires ({$cols}) VALUES ({$phs})")->execute($row);
+    return (int) $pdo->lastInsertId();
+}
+
+function import_proprietaire_locaux(PDO $pdo, int $prop_id, string $parcelle_numero, array $locaux): void
+{
+    $pdo->prepare('DELETE FROM parcelle_proprietaire_locaux WHERE parcelle_proprietaire_id = ?')->execute([$prop_id]);
+
+    $stmt = $pdo->prepare('
+        INSERT INTO parcelle_proprietaire_locaux
+          (parcelle_proprietaire_id, parcelle_numero, code_droit, batiment, entree, niveau, porte,
+           numero_voie, nature_voie, nom_voie, departement, raw_json)
+        VALUES
+          (:prop_id, :parcelle_numero, :code_droit, :batiment, :entree, :niveau, :porte,
+           :numero_voie, :nature_voie, :nom_voie, :departement, :raw_json)
+    ');
+
+    foreach ($locaux as $local) {
+        $stmt->execute([
+            ':prop_id'         => $prop_id,
+            ':parcelle_numero' => $parcelle_numero,
+            ':code_droit'      => $local['code_droit'] ?? null,
+            ':batiment'        => $local['batiment'] ?? null,
+            ':entree'          => $local['entree'] ?? null,
+            ':niveau'          => $local['niveau'] ?? null,
+            ':porte'           => $local['porte'] ?? null,
+            ':numero_voie'     => $local['numero_voie'] ?? null,
+            ':nature_voie'     => $local['nature_voie'] ?? null,
+            ':nom_voie'        => $local['nom_voie'] ?? null,
+            ':departement'     => $local['departement'] ?? null,
+            ':raw_json'        => json_value($local),
+        ]);
+    }
 }

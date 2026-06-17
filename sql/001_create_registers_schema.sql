@@ -614,6 +614,8 @@ CREATE TABLE IF NOT EXISTS parcelles (
   bounding_box JSON NULL,
   surface_batie DECIMAL(18,2) NULL,
   surface_disponible DECIMAL(18,2) NULL,
+  nb_proprietaires_identifies INT NULL,
+  profil_proprietaire VARCHAR(32) NULL,
   statistiques JSON NULL,
   raw_json JSON NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -622,7 +624,8 @@ CREATE TABLE IF NOT EXISTS parcelles (
   KEY idx_parcelles_code_commune (code_commune),
   KEY idx_parcelles_code_postal_region (code_departement, code_region),
   KEY idx_parcelles_section (section),
-  KEY idx_parcelles_contenance (contenance)
+  KEY idx_parcelles_contenance (contenance),
+  KEY idx_parcelles_profil (profil_proprietaire)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS parcelle_proprietaires (
